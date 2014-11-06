@@ -1,0 +1,26 @@
+{
+  "name": "datadive-ozone",
+  "version": "1.0.0",
+  "description": "Set up for the 2014 DataDive",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/akosel/datadive-ozone.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akosel/datadive-ozone/issues"
+  },
+  "homepage": "https://github.com/akosel/datadive-ozone",
+  "dependencies": {
+    "ejs": "^1.0.0",
+    "express": "^4.10.0",
+    "grunt": "^0.4.5",
+    "jade": "^1.7.0"
+  }
+}
