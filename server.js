@@ -9,6 +9,9 @@ app.use(express.static(__dirname + '/app/assets'));
 app.get('/', function(req, res) {
   res.render('index.html');
 });
+app.get('/stack', function(req, res) {
+  res.render('stackgraph.html');
+});
 
 var server = app.listen(process.env.PORT || 8000, function() {
   console.log('listening');
