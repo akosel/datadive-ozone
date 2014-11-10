@@ -1,0 +1,11 @@
+.chart {
+  height: 30em;
+  width: 33%;
+  float: left;
+  margin: 3em auto;
+  text-align: center;
+}
+.chart .title {
+  margin-left: 1em;
+  margin-right: 1em;
+}
