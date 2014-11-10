@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
  * This file allows you to access the public methods of the nvd3 helper
- * Basic usage of graph.render:
+ * Basic usage of graph.renderTimeSeries:
  * ['Week', 'Month', 'Year', 'Weekday']
  * 
  *
@@ -12,18 +12,111 @@
 
 var graph = require('./lib/nvd3helper.js');
 
-graph.render(['Year'], graph.SPKeys, graph.addMultiBarChart, 'Services Provided Summed by Year (2007-2014)');
+graph.renderTimeSeries({
+  groups: ['Year'], 
+  dims: graph.SPKeys, 
+  nvFn: graph.addMultiBarChart, 
+  title: 'Services Provided Summed by Year (2007-2014)', 
+  xType: 'date'
+});
 
-graph.render(['Weekday'], graph.TKeys, graph.addStackedAreaChart, 'Time of Day Summed by Weekday (2007-2014)');
-// graph.render(['Year', 'Month'], graph.SPKeys, graph.addLineWithFocusChart, 'Service Provided Summed by Month and Year (2007-2014)');
-graph.render(['Month'], graph.HAOHKeys, graph.addMultiBarChart, 'How Caller Heard About Ozone House Summed by Month (2007-2014)');
-graph.render(['Week'], graph.problemCodeKeys.slice(0, 10), graph.addMultiBarChart, 'Selected Caller Problems Summed by Week of Year (2007-2014)');
-graph.render(['Week'], graph.ISIDKeys, graph.addMultiBarChart, 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)');
+graph.renderTimeSeries({
+  groups: ['Weekday'], 
+  dims: graph.TKeys, 
+  nvFn: graph.addStackedAreaChart, 
+  title: '#1) Time of Day Summed by Weekday (2007-2014)', 
+  xType: 'index'
+});
 
-graph.render(['Year', 'Month'], graph.otherKeys.slice(1, 3), graph.addLineChart, 'Anxiety Start v Anxiety End (2007-2014)');
-graph.render(['Year', 'Month'], graph.otherKeys.slice(0, 1), graph.addLineChart, 'Anxiety Plan Created (2007-2014)');
+graph.renderTimeSeries({
+  groups: ['Month'], 
+  dims: graph.TKeys, 
+  nvFn: graph.addStackedAreaChart, 
+  title: '#2) Time of Day Summed by Month (2007-2014)', 
+  xType: 'index'
+});
 
-graph.render(['Year', 'Month'], ['Age'], graph.addLineChart, 'Mean Caller Age (2007-2014)');
+graph.renderTimeSeries({
+  groups: ['Year', 'Month'], 
+  dims: graph.TKeys, 
+  nvFn: graph.addStackedAreaChart, 
+  title: '#2) Time of Day Summed by Year and Month (2007-2014)', 
+  xType: 'date'
+});
+
+graph.renderTimeSeries({
+  groups: ['Year', 'Month'], 
+  dims: graph.HAOHKeys, 
+  nvFn: graph.addMultiBarChart, 
+  title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
+  xType: 'index'
+});
+
+graph.renderTimeSeries({
+  groups: ['Week'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: '#3) Selected Caller Problems Summed by Week of Year (2007-2014)', 
+  xType: 'index'
+});
+
+graph.renderTimeSeries({
+  groups: ['Month'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: '#5) Selected Caller Problems Summed by Month (2007-2014)', 
+  xType: 'index'
+});
+
+graph.renderTimeSeries({
+  groups: ['Year'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: '#7) Selected Caller Problems Summed by Year (2007-2014)', 
+  xType: 'date'
+});
+
+graph.renderTimeSeries({
+  groups: ['Year', 'Month'], 
+  dims: graph.ISIDKeys, 
+  nvFn: graph.addMultiBarChart, 
+  title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
+  xType: 'date'
+});
+ 
+graph.renderTimeSeries({
+  // path: '/data/all.csv',
+  groups: ['Year', 'Month'], 
+  dims: [[graph.otherKeys[1], graph.otherKeys[2]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+  nvFn: graph.addScatterChart, 
+  title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
+  xType: 'otherDim'
+});
+
+graph.renderTimeSeries({
+  // path: '/data/all.csv',
+  groups: ['Year', 'Month'], 
+  dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+  nvFn: graph.addScatterChart, 
+  title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
+  xType: 'otherDim'
+});
+
+graph.renderTimeSeries({
+  groups: ['Year', 'Month'], 
+  dims: graph.otherKeys.slice(0, 1), 
+  nvFn: graph.addLineChart, 
+  title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
+  xType: 'date'
+});
+ 
+graph.renderTimeSeries({
+  groups: ['Year', 'Month'], 
+  dims: ['Age'], 
+  nvFn: graph.addLineChart, 
+  title: 'Mean Caller Age (2007-2014)', 
+  xType: 'date'
+});
 
 },{"./lib/nvd3helper.js":2}],2:[function(require,module,exports){
 /*
@@ -128,16 +221,16 @@ module.exports = (function() {
 
   }
 
-  function _xAxisCommon(context, axis) {
+  function _xAxisCommon(context, axis, overrideDefault) {
     axis.tickFormat(function(d) {
-     if (context.groups.length > 1) {
+     if (context.groups.length > 1 && !overrideDefault) {
        return d3.time.format('%B %Y')(new Date(d));
-     } else if (context.groups[0] === 'Year') {
+     } else if (context.groups[0] === 'Year' && !overrideDefault) {
        return d3.time.format('%Y')(new Date(d));
-     } else if (_enums[context.groups[0]]) {
+     } else if (_enums[context.groups[0]] && !overrideDefault) {
        return _enums[context.groups[0]][d]; 
      } else {
-       return d3.format('d')(d);
+       return d;
      }
    });
   }
@@ -146,58 +239,6 @@ module.exports = (function() {
     return ['/data/groupBy', groups.join(''), '.csv'].join(''); 
   }
 
-  function _rollup(args) {
-    if (!args.groups.length) {
-      throw 'You need to pass the groups';
-    }
-    if (!args.dims.length) {
-      throw 'You need to pass the dimensions';
-    }
-
-    var result = [],
-        temp,
-        xVar,
-        xType;
-
-    if (args.groups.length > 1 || args.groups[0] === 'Year') {
-      xType = 'date';
-    } else {
-      xType = 'index';
-    }
-
-    args.dims.forEach(function(dim) {
-      temp = args.data.map(function(row, idx) {
-
-        if (xType === 'date') {
-          var year = row.year || '2014';
-          var month = row.month || '0';
-          var day = row.day || '15';
-          xVar = new Date(year, month, day);
-        } else if (xType === 'index') {
-          xVar = idx;
-        }
-
-        if (dim === 'Age') {
-          row[dim] = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
-        }
-        return {
-          x: xVar,
-          y: +row[dim]
-        };
-      });
-
-      if (_problemCodesMap[dim]) {
-        dim = _problemCodesMap[dim];
-      }
-
-      result.push({
-        key: dim,
-        values: temp
-      });
-    });
-
-    return result;
-  }
 
   /*
    *  wrapper functions to add charts to our dashboard
@@ -219,7 +260,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
-  }
+  };
 
   Graph.addLineChart = function() {
 
@@ -235,7 +276,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
       
-  }
+  };
 
   Graph.addScatterChart = function() {
 
@@ -243,7 +284,7 @@ module.exports = (function() {
 
     var chart = nv.models.scatterChart();
 
-    _xAxisCommon(context, chart.xAxis);
+    _xAxisCommon(context, chart.xAxis, true);
 
     chart.yAxis
          .tickFormat(d3.format(',r'));
@@ -269,7 +310,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
-  }
+  };
 
   Graph.addMultiBarChart = function() {
 
@@ -286,29 +327,90 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
+  };
+
+  function _timeSeriesMapFn() {
+
   }
 
-  Graph.render = function(groups, dims, nvFn, title) {
-    var path = _buildPath(groups);
+
+  Graph.renderXYSeries = function() {
+
+  };
+
+  Graph.renderTimeSeries = function(args) {
+    var path = args.path || _buildPath(args.groups);
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(title);
+      var selector = _drawChartDiv(args.title);
 
-      var summaryData = _rollup({
+      var summaryData = _mapToKeyValuesArray({
         data: data, 
-        dims: dims,
-        groups: groups
+        dims: args.dims,
+        groups: args.groups,
+        xType: args.xType || 'date' 
       });
 
-      var fn = nvFn.bind({ 
+      var fn = args.nvFn.bind({ 
         selector: selector, 
         summaryData: summaryData,
-        title: title,
-        groups: groups
+        groups: args.groups
       });
       nv.addGraph(fn);
     });
 
+  };
+
+  function _mapToKeyValuesArray(args) {
+    if (!args.groups.length) {
+      throw 'You need to pass the groups';
+    }
+    if (!args.dims.length) {
+      throw 'You need to pass the dimensions';
+    }
+
+    var result = [],
+        temp,
+        xVar,
+        yVar;
+
+    args.dims.forEach(function(dim) {
+      temp = args.data.map(function(row, idx) {
+
+        if (args.xType === 'date') {
+          var year = row.year || '2014';
+          var month = row.month || '0';
+          var day = row.day || '15';
+          xVar = new Date(year, month, day);
+          yVar = +row[dim];
+        } else if (args.xType === 'index') {
+          xVar = idx;
+          yVar = +row[dim];
+        } else if (args.xType === 'otherDim') {
+          xVar = +row[dim[0]];
+          yVar = +row[dim[1]];
+        }
+
+        if (dim === 'Age') {
+          yVar = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
+        }
+        return {
+          x: xVar,
+          y: yVar 
+        };
+      });
+
+      if (_problemCodesMap[dim]) {
+        dim = _problemCodesMap[dim];
+      }
+
+      result.push({
+        key: dim,
+        values: temp
+      });
+    });
+
+    return result;
   }
 
   return Graph;

@@ -100,16 +100,16 @@ module.exports = (function() {
 
   }
 
-  function _xAxisCommon(context, axis) {
+  function _xAxisCommon(context, axis, overrideDefault) {
     axis.tickFormat(function(d) {
-     if (context.groups.length > 1) {
+     if (context.groups.length > 1 && !overrideDefault) {
        return d3.time.format('%B %Y')(new Date(d));
-     } else if (context.groups[0] === 'Year') {
+     } else if (context.groups[0] === 'Year' && !overrideDefault) {
        return d3.time.format('%Y')(new Date(d));
-     } else if (_enums[context.groups[0]]) {
+     } else if (_enums[context.groups[0]] && !overrideDefault) {
        return _enums[context.groups[0]][d]; 
      } else {
-       return d3.format('d')(d);
+       return d;
      }
    });
   }
@@ -118,58 +118,6 @@ module.exports = (function() {
     return ['/data/groupBy', groups.join(''), '.csv'].join(''); 
   }
 
-  function _rollup(args) {
-    if (!args.groups.length) {
-      throw 'You need to pass the groups';
-    }
-    if (!args.dims.length) {
-      throw 'You need to pass the dimensions';
-    }
-
-    var result = [],
-        temp,
-        xVar,
-        xType;
-
-    if (args.groups.length > 1 || args.groups[0] === 'Year') {
-      xType = 'date';
-    } else {
-      xType = 'index';
-    }
-
-    args.dims.forEach(function(dim) {
-      temp = args.data.map(function(row, idx) {
-
-        if (xType === 'date') {
-          var year = row.year || '2014';
-          var month = row.month || '0';
-          var day = row.day || '15';
-          xVar = new Date(year, month, day);
-        } else if (xType === 'index') {
-          xVar = idx;
-        }
-
-        if (dim === 'Age') {
-          row[dim] = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
-        }
-        return {
-          x: xVar,
-          y: +row[dim]
-        };
-      });
-
-      if (_problemCodesMap[dim]) {
-        dim = _problemCodesMap[dim];
-      }
-
-      result.push({
-        key: dim,
-        values: temp
-      });
-    });
-
-    return result;
-  }
 
   /*
    *  wrapper functions to add charts to our dashboard
@@ -191,7 +139,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
-  }
+  };
 
   Graph.addLineChart = function() {
 
@@ -207,7 +155,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
       
-  }
+  };
 
   Graph.addScatterChart = function() {
 
@@ -215,7 +163,7 @@ module.exports = (function() {
 
     var chart = nv.models.scatterChart();
 
-    _xAxisCommon(context, chart.xAxis);
+    _xAxisCommon(context, chart.xAxis, true);
 
     chart.yAxis
          .tickFormat(d3.format(',r'));
@@ -241,7 +189,7 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
-  }
+  };
 
   Graph.addMultiBarChart = function() {
 
@@ -258,29 +206,90 @@ module.exports = (function() {
 
     return _nvCommon(context, chart);
 
+  };
+
+  function _timeSeriesMapFn() {
+
   }
 
-  Graph.render = function(groups, dims, nvFn, title) {
-    var path = _buildPath(groups);
+
+  Graph.renderXYSeries = function() {
+
+  };
+
+  Graph.renderTimeSeries = function(args) {
+    var path = args.path || _buildPath(args.groups);
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(title);
+      var selector = _drawChartDiv(args.title);
 
-      var summaryData = _rollup({
+      var summaryData = _mapToKeyValuesArray({
         data: data, 
-        dims: dims,
-        groups: groups
+        dims: args.dims,
+        groups: args.groups,
+        xType: args.xType || 'date' 
       });
 
-      var fn = nvFn.bind({ 
+      var fn = args.nvFn.bind({ 
         selector: selector, 
         summaryData: summaryData,
-        title: title,
-        groups: groups
+        groups: args.groups
       });
       nv.addGraph(fn);
     });
 
+  };
+
+  function _mapToKeyValuesArray(args) {
+    if (!args.groups.length) {
+      throw 'You need to pass the groups';
+    }
+    if (!args.dims.length) {
+      throw 'You need to pass the dimensions';
+    }
+
+    var result = [],
+        temp,
+        xVar,
+        yVar;
+
+    args.dims.forEach(function(dim) {
+      temp = args.data.map(function(row, idx) {
+
+        if (args.xType === 'date') {
+          var year = row.year || '2014';
+          var month = row.month || '0';
+          var day = row.day || '15';
+          xVar = new Date(year, month, day);
+          yVar = +row[dim];
+        } else if (args.xType === 'index') {
+          xVar = idx;
+          yVar = +row[dim];
+        } else if (args.xType === 'otherDim') {
+          xVar = +row[dim[0]];
+          yVar = +row[dim[1]];
+        }
+
+        if (dim === 'Age') {
+          yVar = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
+        }
+        return {
+          x: xVar,
+          y: yVar 
+        };
+      });
+
+      if (_problemCodesMap[dim]) {
+        dim = _problemCodesMap[dim];
+      }
+
+      result.push({
+        key: dim,
+        values: temp
+      });
+    });
+
+    return result;
   }
 
   return Graph;
