@@ -4,11 +4,12 @@
   margin: 3em auto;
   text-align: center;
   color: #50225A;
-  width: 100%;
+  width: 50%;
 
-  @media only screen and (min-width: 600px) {
-    width: 50%;
-
+}
+@media only screen and (max-device-width: 600px) {
+  .chart {
+    width: 100%;
   }
 }
 .chart .title {
