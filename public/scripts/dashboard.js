@@ -48,7 +48,7 @@ graph.renderTimeSeries({
   dims: graph.HAOHKeys, 
   nvFn: graph.addMultiBarChart, 
   title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
-  xType: 'index'
+  xType: 'date'
 });
 
 graph.renderTimeSeries({
