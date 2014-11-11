@@ -1,10 +1,15 @@
 .chart {
   height: 30em;
-  width: 50%;
   float: left;
   margin: 3em auto;
   text-align: center;
   color: #50225A;
+  width: 100%;
+
+  @media only screen and (min-width: 600px) {
+    width: 50%;
+
+  }
 }
 .chart .title {
   margin-left: 1em;
