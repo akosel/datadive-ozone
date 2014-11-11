@@ -75,44 +75,73 @@ graph.renderTimeSeries({
   xType: 'date'
 });
 
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.ISIDKeys, 
-  nvFn: graph.addMultiBarChart, 
-  title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
-  xType: 'date'
-});
+// graph.renderTimeSeries({
+//   groups: ['Year', 'Month'], 
+//   dims: graph.ISIDKeys, 
+//   nvFn: graph.addMultiBarChart, 
+//   title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
+//   xType: 'date'
+// });
+//  
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: [[graph.otherKeys[2], graph.otherKeys[1]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+//   nvFn: graph.addScatterChart, 
+//   title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
+//   xType: 'otherDim',
+//   yAxisLabel: 'Anxiety Start',
+//   xAxisLabel: 'Anxiety End'
+// });
+// 
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+//   nvFn: graph.addScatterChart, 
+//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
+//   xType: 'otherDim',
+// });
+// 
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: graph.otherKeys, 
+//   nvFn: graph.addMultiBarChart, 
+//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
+//   xType: 'date',
+// });
+// 
+// graph.renderTimeSeries({
+//   groups: ['Year', 'Month'], 
+//   dims: graph.otherKeys.slice(0, 1), 
+//   nvFn: graph.addLineChart, 
+//   title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
+//   xType: 'date'
+// });
  
 graph.renderTimeSeries({
-  // path: '/data/all.csv',
-  groups: ['Year', 'Month'], 
-  dims: [[graph.otherKeys[1], graph.otherKeys[2]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-  nvFn: graph.addScatterChart, 
-  title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
-  xType: 'otherDim'
-});
-
-graph.renderTimeSeries({
-  // path: '/data/all.csv',
-  groups: ['Year', 'Month'], 
-  dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-  nvFn: graph.addScatterChart, 
-  title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-  xType: 'otherDim'
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.otherKeys.slice(0, 1), 
+  groups: ['Year'], 
+  dims: ['Age'], 
   nvFn: graph.addLineChart, 
-  title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
-  xType: 'date'
+  title: 'Mean Caller Age (2007-2014)', 
+  xType: 'date',
+  dataType: 'Mean'
 });
- 
+
 graph.renderTimeSeries({
   groups: ['Year', 'Month'], 
   dims: ['Age'], 
   nvFn: graph.addLineChart, 
   title: 'Mean Caller Age (2007-2014)', 
+  xType: 'date',
+  dataType: 'Mean'
+});
+
+graph.renderTimeSeries({
+  groups: ['Month'], 
+  dims: graph.RHTAgeKeys, 
+  nvFn: graph.addLineWithFocusChart, 
+  title: 'A Chart (2007-2014)', 
   xType: 'date'
 });

@@ -33,7 +33,7 @@ module.exports = (function() {
     Weekday: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   };
 
-  _problemCodesMap = { 
+  _codeToDescriptionMap = { 
     'PA': 'Runaway Potential<18',
     'PB': 'Throwaway<18',
     'PC': 'Homeless Potemtial17+',
@@ -111,11 +111,13 @@ module.exports = (function() {
      } else {
        return d;
      }
-   });
+   })
+   .axisLabel(context.xAxisLabel);
   }
 
-  function _buildPath(groups) {
-    return ['/data/groupBy', groups.join(''), '.csv'].join(''); 
+  function _buildPath(groups, dataType) {
+    var dataType = dataType || 'Sum';
+    return ['/data/groupBy', groups.join(''), dataType, '.csv'].join(''); 
   }
 
 
@@ -135,7 +137,8 @@ module.exports = (function() {
 
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -151,7 +154,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
       
@@ -166,7 +170,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis, true);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
       
@@ -182,10 +187,12 @@ module.exports = (function() {
     _xAxisCommon(context, chart.x2Axis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     chart.y2Axis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -202,7 +209,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -218,7 +226,7 @@ module.exports = (function() {
   };
 
   Graph.renderTimeSeries = function(args) {
-    var path = args.path || _buildPath(args.groups);
+    var path = args.path || _buildPath(args.groups, args.dataType);
 
     d3.csv(path, function(data) {
       var selector = _drawChartDiv(args.title);
@@ -233,7 +241,9 @@ module.exports = (function() {
       var fn = args.nvFn.bind({ 
         selector: selector, 
         summaryData: summaryData,
-        groups: args.groups
+        groups: args.groups,
+        xAxisLabel: args.xAxisLabel,
+        yAxisLabel: args.yAxisLabel
       });
       nv.addGraph(fn);
     });
@@ -270,17 +280,14 @@ module.exports = (function() {
           yVar = +row[dim[1]];
         }
 
-        if (dim === 'Age') {
-          yVar = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
-        }
         return {
           x: xVar,
           y: yVar 
         };
       });
 
-      if (_problemCodesMap[dim]) {
-        dim = _problemCodesMap[dim];
+      if (_codeToDescriptionMap[dim]) {
+        dim = _codeToDescriptionMap[dim];
       }
 
       result.push({

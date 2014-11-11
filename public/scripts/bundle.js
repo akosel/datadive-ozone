@@ -76,45 +76,74 @@ graph.renderTimeSeries({
   xType: 'date'
 });
 
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.ISIDKeys, 
-  nvFn: graph.addMultiBarChart, 
-  title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
-  xType: 'date'
-});
+// graph.renderTimeSeries({
+//   groups: ['Year', 'Month'], 
+//   dims: graph.ISIDKeys, 
+//   nvFn: graph.addMultiBarChart, 
+//   title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
+//   xType: 'date'
+// });
+//  
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: [[graph.otherKeys[2], graph.otherKeys[1]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+//   nvFn: graph.addScatterChart, 
+//   title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
+//   xType: 'otherDim',
+//   yAxisLabel: 'Anxiety Start',
+//   xAxisLabel: 'Anxiety End'
+// });
+// 
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
+//   nvFn: graph.addScatterChart, 
+//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
+//   xType: 'otherDim',
+// });
+// 
+// graph.renderTimeSeries({
+//   // path: '/data/all.csv',
+//   groups: ['Year', 'Month'], 
+//   dims: graph.otherKeys, 
+//   nvFn: graph.addMultiBarChart, 
+//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
+//   xType: 'date',
+// });
+// 
+// graph.renderTimeSeries({
+//   groups: ['Year', 'Month'], 
+//   dims: graph.otherKeys.slice(0, 1), 
+//   nvFn: graph.addLineChart, 
+//   title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
+//   xType: 'date'
+// });
  
 graph.renderTimeSeries({
-  // path: '/data/all.csv',
-  groups: ['Year', 'Month'], 
-  dims: [[graph.otherKeys[1], graph.otherKeys[2]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-  nvFn: graph.addScatterChart, 
-  title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
-  xType: 'otherDim'
-});
-
-graph.renderTimeSeries({
-  // path: '/data/all.csv',
-  groups: ['Year', 'Month'], 
-  dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-  nvFn: graph.addScatterChart, 
-  title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-  xType: 'otherDim'
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.otherKeys.slice(0, 1), 
+  groups: ['Year'], 
+  dims: ['Age'], 
   nvFn: graph.addLineChart, 
-  title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
-  xType: 'date'
+  title: 'Mean Caller Age (2007-2014)', 
+  xType: 'date',
+  dataType: 'Mean'
 });
- 
+
 graph.renderTimeSeries({
   groups: ['Year', 'Month'], 
   dims: ['Age'], 
   nvFn: graph.addLineChart, 
   title: 'Mean Caller Age (2007-2014)', 
+  xType: 'date',
+  dataType: 'Mean'
+});
+
+graph.renderTimeSeries({
+  groups: ['Month'], 
+  dims: graph.RHTAgeKeys, 
+  nvFn: graph.addLineWithFocusChart, 
+  title: 'A Chart (2007-2014)', 
   xType: 'date'
 });
 
@@ -154,7 +183,7 @@ module.exports = (function() {
     Weekday: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
   };
 
-  _problemCodesMap = { 
+  _codeToDescriptionMap = { 
     'PA': 'Runaway Potential<18',
     'PB': 'Throwaway<18',
     'PC': 'Homeless Potemtial17+',
@@ -232,11 +261,13 @@ module.exports = (function() {
      } else {
        return d;
      }
-   });
+   })
+   .axisLabel(context.xAxisLabel);
   }
 
-  function _buildPath(groups) {
-    return ['/data/groupBy', groups.join(''), '.csv'].join(''); 
+  function _buildPath(groups, dataType) {
+    var dataType = dataType || 'Sum';
+    return ['/data/groupBy', groups.join(''), dataType, '.csv'].join(''); 
   }
 
 
@@ -256,7 +287,8 @@ module.exports = (function() {
 
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -272,7 +304,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
       
@@ -287,7 +320,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis, true);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
       
@@ -303,10 +337,12 @@ module.exports = (function() {
     _xAxisCommon(context, chart.x2Axis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     chart.y2Axis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -323,7 +359,8 @@ module.exports = (function() {
     _xAxisCommon(context, chart.xAxis);
 
     chart.yAxis
-         .tickFormat(d3.format(',r'));
+         .tickFormat(d3.format(',r'))
+         .axisLabel(context.yAxisLabel);
 
     return _nvCommon(context, chart);
 
@@ -339,7 +376,7 @@ module.exports = (function() {
   };
 
   Graph.renderTimeSeries = function(args) {
-    var path = args.path || _buildPath(args.groups);
+    var path = args.path || _buildPath(args.groups, args.dataType);
 
     d3.csv(path, function(data) {
       var selector = _drawChartDiv(args.title);
@@ -354,7 +391,9 @@ module.exports = (function() {
       var fn = args.nvFn.bind({ 
         selector: selector, 
         summaryData: summaryData,
-        groups: args.groups
+        groups: args.groups,
+        xAxisLabel: args.xAxisLabel,
+        yAxisLabel: args.yAxisLabel
       });
       nv.addGraph(fn);
     });
@@ -391,17 +430,14 @@ module.exports = (function() {
           yVar = +row[dim[1]];
         }
 
-        if (dim === 'Age') {
-          yVar = row[dim] / (+row['T1-5'] + +row['T9-1'] + +row['T5-8'] + +row['T8-9']);
-        }
         return {
           x: xVar,
           y: yVar 
         };
       });
 
-      if (_problemCodesMap[dim]) {
-        dim = _problemCodesMap[dim];
+      if (_codeToDescriptionMap[dim]) {
+        dim = _codeToDescriptionMap[dim];
       }
 
       result.push({
