@@ -21,7 +21,7 @@ header .container {
   color: white;
 }
 @media only screen and (max-width: 960px) {
-  header {
+  header .container{
     width: 100%;
   }
 }
