@@ -73,11 +73,11 @@ module.exports = (function() {
   };
 
   // handles appending a new chart to the dom. returns the selector
-  function _drawChartDiv(title) {
+  function _drawChartDiv(title, questionNumber) {
 
     var html = '<div class="chart" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
 
-    var $chart = $(html).appendTo('body');
+    var $chart = questionNumber ? $(html).appendTo('section#question' + questionNumber) : $(html).appendTo('main');
 
     Graph.charts.push($chart[0]);
     return $chart[0];
@@ -229,7 +229,7 @@ module.exports = (function() {
     var path = args.path || _buildPath(args.groups, args.dataType);
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(args.title);
+      var selector = _drawChartDiv(args.title, args.questionNumber);
 
       var summaryData = _mapToKeyValuesArray({
         data: data, 

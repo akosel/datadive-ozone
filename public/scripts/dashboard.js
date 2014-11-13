@@ -24,7 +24,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#1) Time of Day Summed by Weekday (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 1
 });
 
 graph.renderTimeSeries({
@@ -32,7 +33,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Month (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 2
 });
 
 graph.renderTimeSeries({
@@ -40,7 +42,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Year and Month (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 2
 });
 
 graph.renderTimeSeries({
@@ -48,7 +51,8 @@ graph.renderTimeSeries({
   dims: graph.HAOHKeys, 
   nvFn: graph.addMultiBarChart, 
   title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 9
 });
 
 graph.renderTimeSeries({
@@ -56,7 +60,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#3) Selected Caller Problems Summed by Week of Year (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 3
 });
 
 graph.renderTimeSeries({
@@ -64,7 +69,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#5) Selected Caller Problems Summed by Month (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 5
 });
 
 graph.renderTimeSeries({
@@ -72,7 +78,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#7) Selected Caller Problems Summed by Year (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 7
 });
 
 // graph.renderTimeSeries({

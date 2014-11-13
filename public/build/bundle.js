@@ -25,7 +25,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#1) Time of Day Summed by Weekday (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 1
 });
 
 graph.renderTimeSeries({
@@ -33,7 +34,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Month (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 2
 });
 
 graph.renderTimeSeries({
@@ -41,7 +43,8 @@ graph.renderTimeSeries({
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Year and Month (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 2
 });
 
 graph.renderTimeSeries({
@@ -49,7 +52,8 @@ graph.renderTimeSeries({
   dims: graph.HAOHKeys, 
   nvFn: graph.addMultiBarChart, 
   title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 9
 });
 
 graph.renderTimeSeries({
@@ -57,7 +61,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#3) Selected Caller Problems Summed by Week of Year (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 3
 });
 
 graph.renderTimeSeries({
@@ -65,7 +70,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#5) Selected Caller Problems Summed by Month (2007-2014)', 
-  xType: 'index'
+  xType: 'index',
+  questionNumber: 5
 });
 
 graph.renderTimeSeries({
@@ -73,7 +79,8 @@ graph.renderTimeSeries({
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
   title: '#7) Selected Caller Problems Summed by Year (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  questionNumber: 7
 });
 
 // graph.renderTimeSeries({
@@ -223,11 +230,11 @@ module.exports = (function() {
   };
 
   // handles appending a new chart to the dom. returns the selector
-  function _drawChartDiv(title) {
+  function _drawChartDiv(title, questionNumber) {
 
     var html = '<div class="chart" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
 
-    var $chart = $(html).appendTo('body');
+    var $chart = questionNumber ? $(html).appendTo('section#question' + questionNumber) : $(html).appendTo('main');
 
     Graph.charts.push($chart[0]);
     return $chart[0];
@@ -379,7 +386,7 @@ module.exports = (function() {
     var path = args.path || _buildPath(args.groups, args.dataType);
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(args.title);
+      var selector = _drawChartDiv(args.title, args.questionNumber);
 
       var summaryData = _mapToKeyValuesArray({
         data: data, 

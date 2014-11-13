@@ -2,9 +2,24 @@
 
 
 module.exports = function(grunt) {
-  grunt.registerTask('hello', function() {
-    console.log('hello');
+  grunt.initConfig({
+    browserify: {
+      client: {
+        src: 'public/scripts/dashboard.js',
+        dest: 'public/build/bundle.js'
+      }
+    },
+    watch: {
+      js: {
+        files: ['public/scripts/**/*.js'],
+        tasks: ['browserify']
+      }
+    }
   });
 
-  grunt.registerTask('default', 'hello');
+  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+
+  grunt.registerTask('default', 'browserify');
+
 };
