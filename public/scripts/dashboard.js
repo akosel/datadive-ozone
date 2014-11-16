@@ -29,7 +29,7 @@ graph.renderSeries({
   groups: ['AnxietyStart'], 
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
-  title: 'Common problem codes for different anxiety levels (2012-2014)', 
+  title: 'Common problem codes for different starting anxiety levels (2012-2014)', 
   xType: 'index-1',
   size: 'full',
   questionNumber: 6,
@@ -72,4 +72,27 @@ graph.renderSeries({
   title: '#4) Selected caller problems by year (2007-2014)', 
   xType: 'date',
   questionNumber: 2
+});
+
+
+
+graph.renderSeries({
+  groups: ['Year', 'Month'], 
+  dims: graph.HAOHKeys, 
+  nvFn: graph.addMultiBarChart, 
+  title: '#10) How caller heard about Ozone House (2007-2014)', 
+  xType: 'date',
+  questionNumber: 10,
+  size: 'full'
+});
+
+graph.renderSeries({
+  groups: ['Year', 'Month'], 
+  dims: ['yes', 'no'], 
+  nvFn: graph.addMultiBarChart, 
+  title: '#9) Percentage of calls with immediate safety concerns resulting in a safety plan being formed (2012-2014)', 
+  xType: 'date',
+  questionNumber: 9,
+  path: '/data/safe/groupBySP.csv',
+  size: 'full'
 });
