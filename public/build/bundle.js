@@ -1,26 +1,43 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 /*
+ *
  * This file allows you to access the public methods of the nvd3 helper
- * Basic usage of graph.renderTimeSeries:
- * ['Week', 'Month', 'Year', 'Weekday']
- * 
- *
- *
- *
+ * Basic usage of graph.renderSeries:
+ * @param {array} groups: ['Week'], ['Month'], ['Year'], ['Weekday'], and ['Year', 'Month']
+ * @param {array} dims: graph.SPKeys, graph.TKeys, graph.problemCodeKeys, graph.HAOHKeys, graph.ISIDKeys, graph.RHTKeys
+ * @param {function} nvFn: graph.addMultiBarChart, graph.addStackedAreaChart, graph.addLineChart, graph.addLineChartWithFocus, graph.addScatterChart (use with caution)
+ * @param {string} title: whatever you want
+ * @param {string} xType: 'index', 'index-1' (uses a 1-based index vs 0-based), 'date', 'otherDim'
+ * @param {number} questionNumber: integer from 1 to 10
+ * @param {string} dataType: 'Sum' or 'Mean'
  *
  */
 
 var graph = require('./lib/nvd3helper.js');
 
-graph.renderTimeSeries({
+
+// add in different visualizations here
+graph.renderSeries({
   groups: ['Year'], 
   dims: graph.SPKeys, 
   nvFn: graph.addMultiBarChart, 
   title: 'Services Provided Summed by Year (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  size: 'half'
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
+  groups: ['AnxietyStart'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: 'Common problem codes for different anxiety levels (2012-2014)', 
+  xType: 'index-1',
+  size: 'full',
+  questionNumber: 6,
+  dataType: 'mean'
+});
+
+graph.renderSeries({
   groups: ['Weekday'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
@@ -29,129 +46,33 @@ graph.renderTimeSeries({
   questionNumber: 1
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
   groups: ['Month'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Month (2007-2014)', 
   xType: 'index',
-  questionNumber: 2
+  questionNumber: 2,
+  size: 'half'
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
   groups: ['Year', 'Month'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Year and Month (2007-2014)', 
   xType: 'date',
+  questionNumber: 2,
+  size: 'half'
+});
+
+graph.renderSeries({
+  groups: ['Year'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: '#4) Selected caller problems by year (2007-2014)', 
+  xType: 'date',
   questionNumber: 2
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.HAOHKeys, 
-  nvFn: graph.addMultiBarChart, 
-  title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
-  xType: 'date',
-  questionNumber: 9
-});
-
-graph.renderTimeSeries({
-  groups: ['Week'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#3) Selected Caller Problems Summed by Week of Year (2007-2014)', 
-  xType: 'index',
-  questionNumber: 3
-});
-
-graph.renderTimeSeries({
-  groups: ['Month'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#5) Selected Caller Problems Summed by Month (2007-2014)', 
-  xType: 'index',
-  questionNumber: 5
-});
-
-graph.renderTimeSeries({
-  groups: ['Year'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#7) Selected Caller Problems Summed by Year (2007-2014)', 
-  xType: 'date',
-  questionNumber: 7
-});
-
-// graph.renderTimeSeries({
-//   groups: ['Year', 'Month'], 
-//   dims: graph.ISIDKeys, 
-//   nvFn: graph.addMultiBarChart, 
-//   title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
-//   xType: 'date'
-// });
-//  
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: [[graph.otherKeys[2], graph.otherKeys[1]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-//   nvFn: graph.addScatterChart, 
-//   title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
-//   xType: 'otherDim',
-//   yAxisLabel: 'Anxiety Start',
-//   xAxisLabel: 'Anxiety End'
-// });
-// 
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-//   nvFn: graph.addScatterChart, 
-//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-//   xType: 'otherDim',
-// });
-// 
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: graph.otherKeys, 
-//   nvFn: graph.addMultiBarChart, 
-//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-//   xType: 'date',
-// });
-// 
-// graph.renderTimeSeries({
-//   groups: ['Year', 'Month'], 
-//   dims: graph.otherKeys.slice(0, 1), 
-//   nvFn: graph.addLineChart, 
-//   title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
-//   xType: 'date'
-// });
- 
-graph.renderTimeSeries({
-  groups: ['Year'], 
-  dims: ['Age'], 
-  nvFn: graph.addLineChart, 
-  title: 'Mean Caller Age (2007-2014)', 
-  xType: 'date',
-  dataType: 'Mean'
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: ['Age'], 
-  nvFn: graph.addLineChart, 
-  title: 'Mean Caller Age (2007-2014)', 
-  xType: 'date',
-  dataType: 'Mean'
-});
-
-graph.renderTimeSeries({
-  groups: ['Month'], 
-  dims: graph.RHTAgeKeys, 
-  nvFn: graph.addLineWithFocusChart, 
-  title: 'A Chart (2007-2014)', 
-  xType: 'date'
 });
 
 },{"./lib/nvd3helper.js":2}],2:[function(require,module,exports){
@@ -168,13 +89,13 @@ module.exports = (function() {
 
   Graph.charts = [];
 
-  Graph.allKeys = ["R","H","T","T9-1","T1-5","T5-8","T8-9","Age","HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown","PA","PB","PC ","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk","SPEmpathy","SPInfoGathering","SPProblemSolving","SPRealityTesting","SPSafetyPlanning","ISIDFamily Conflict","ISIDCurrent Abuse","ISIDSuicide","ISIDOn the street","ISIDDomestic Violence","ISIDOther","SafetyPlan","AnxietyStart","AnxietyEnd","Increase","Decrease","No Change","PositiveChange","CallsInCrisisw/SP","Intake Scheduled","# of Referrals Given"];
+  Graph.allKeys = ["R","H","T","T9-1","T1-5","T5-8","T8-9","Age","HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown","PA","PB","PC","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk","SPEmpathy","SPInfoGathering","SPProblemSolving","SPRealityTesting","SPSafetyPlanning","ISIDFamily Conflict","ISIDCurrent Abuse","ISIDSuicide","ISIDOn the street","ISIDDomestic Violence","ISIDOther","SafetyPlan","AnxietyStart","AnxietyEnd","Increase","Decrease","No Change","PositiveChange","CallsInCrisisw/SP","Intake Scheduled","# of Referrals Given"];
 
   Graph.RHTAgeKeys = ["R","H","T","Age"];
 
   Graph.TKeys = ["T9-1","T1-5","T5-8","T8-9"];
 
-  Graph.problemCodeKeys = ["PA","PB","PC ","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk"];
+  Graph.problemCodeKeys = ["PA","PB","PC","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk"];
 
   Graph.HAOHKeys = ["HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown"];
 
@@ -193,7 +114,7 @@ module.exports = (function() {
   _codeToDescriptionMap = { 
     'PA': 'Runaway Potential<18',
     'PB': 'Throwaway<18',
-    'PC': 'Homeless Potemtial17+',
+    'PC': 'Homeless Potential17+',
     'PD': 'Pregnancy/Teen Parent',
     'PE': 'Economic Hardship',
     'PF': 'Family Conflict',
@@ -230,9 +151,9 @@ module.exports = (function() {
   };
 
   // handles appending a new chart to the dom. returns the selector
-  function _drawChartDiv(title, questionNumber) {
+  function _drawChartDiv(title, questionNumber, size) {
 
-    var html = '<div class="chart" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
+    var html = '<div class="chart ' + size + '" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
 
     var $chart = questionNumber ? $(html).appendTo('section#question' + questionNumber) : $(html).appendTo('main');
 
@@ -286,6 +207,7 @@ module.exports = (function() {
   Graph.addStackedAreaChart = function() {
 
     var context = this;
+
 
     var chart = nv.models.stackedAreaChart()
                   .useInteractiveGuideline(true);
@@ -373,20 +295,13 @@ module.exports = (function() {
 
   };
 
-  function _timeSeriesMapFn() {
 
-  }
-
-
-  Graph.renderXYSeries = function() {
-
-  };
-
-  Graph.renderTimeSeries = function(args) {
+  Graph.renderSeries = function(args) {
     var path = args.path || _buildPath(args.groups, args.dataType);
+    var size = args.size || 'full';
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(args.title, args.questionNumber);
+      var selector = _drawChartDiv(args.title, args.questionNumber, size);
 
       var summaryData = _mapToKeyValuesArray({
         data: data, 
@@ -431,6 +346,9 @@ module.exports = (function() {
           yVar = +row[dim];
         } else if (args.xType === 'index') {
           xVar = idx;
+          yVar = +row[dim];
+        } else if (args.xType === 'index-1') {
+          xVar = idx + 1;
           yVar = +row[dim];
         } else if (args.xType === 'otherDim') {
           xVar = +row[dim[0]];

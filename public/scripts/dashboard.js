@@ -1,25 +1,42 @@
 /*
+ *
  * This file allows you to access the public methods of the nvd3 helper
- * Basic usage of graph.renderTimeSeries:
- * ['Week', 'Month', 'Year', 'Weekday']
- * 
- *
- *
- *
+ * Basic usage of graph.renderSeries:
+ * @param {array} groups: ['Week'], ['Month'], ['Year'], ['Weekday'], and ['Year', 'Month']
+ * @param {array} dims: graph.SPKeys, graph.TKeys, graph.problemCodeKeys, graph.HAOHKeys, graph.ISIDKeys, graph.RHTKeys
+ * @param {function} nvFn: graph.addMultiBarChart, graph.addStackedAreaChart, graph.addLineChart, graph.addLineChartWithFocus, graph.addScatterChart (use with caution)
+ * @param {string} title: whatever you want
+ * @param {string} xType: 'index', 'index-1' (uses a 1-based index vs 0-based), 'date', 'otherDim'
+ * @param {number} questionNumber: integer from 1 to 10
+ * @param {string} dataType: 'Sum' or 'Mean'
  *
  */
 
 var graph = require('./lib/nvd3helper.js');
 
-graph.renderTimeSeries({
+
+// add in different visualizations here
+graph.renderSeries({
   groups: ['Year'], 
   dims: graph.SPKeys, 
   nvFn: graph.addMultiBarChart, 
   title: 'Services Provided Summed by Year (2007-2014)', 
-  xType: 'date'
+  xType: 'date',
+  size: 'half'
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
+  groups: ['AnxietyStart'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: 'Common problem codes for different anxiety levels (2012-2014)', 
+  xType: 'index-1',
+  size: 'full',
+  questionNumber: 6,
+  dataType: 'mean'
+});
+
+graph.renderSeries({
   groups: ['Weekday'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
@@ -28,127 +45,31 @@ graph.renderTimeSeries({
   questionNumber: 1
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
   groups: ['Month'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Month (2007-2014)', 
   xType: 'index',
-  questionNumber: 2
+  questionNumber: 2,
+  size: 'half'
 });
 
-graph.renderTimeSeries({
+graph.renderSeries({
   groups: ['Year', 'Month'], 
   dims: graph.TKeys, 
   nvFn: graph.addStackedAreaChart, 
   title: '#2) Time of Day Summed by Year and Month (2007-2014)', 
   xType: 'date',
+  questionNumber: 2,
+  size: 'half'
+});
+
+graph.renderSeries({
+  groups: ['Year'], 
+  dims: graph.problemCodeKeys.slice(0, 10), 
+  nvFn: graph.addMultiBarChart, 
+  title: '#4) Selected caller problems by year (2007-2014)', 
+  xType: 'date',
   questionNumber: 2
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: graph.HAOHKeys, 
-  nvFn: graph.addMultiBarChart, 
-  title: '#9) How Caller Heard About Ozone House Summed by Month (2007-2014)', 
-  xType: 'date',
-  questionNumber: 9
-});
-
-graph.renderTimeSeries({
-  groups: ['Week'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#3) Selected Caller Problems Summed by Week of Year (2007-2014)', 
-  xType: 'index',
-  questionNumber: 3
-});
-
-graph.renderTimeSeries({
-  groups: ['Month'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#5) Selected Caller Problems Summed by Month (2007-2014)', 
-  xType: 'index',
-  questionNumber: 5
-});
-
-graph.renderTimeSeries({
-  groups: ['Year'], 
-  dims: graph.problemCodeKeys.slice(0, 10), 
-  nvFn: graph.addMultiBarChart, 
-  title: '#7) Selected Caller Problems Summed by Year (2007-2014)', 
-  xType: 'date',
-  questionNumber: 7
-});
-
-// graph.renderTimeSeries({
-//   groups: ['Year', 'Month'], 
-//   dims: graph.ISIDKeys, 
-//   nvFn: graph.addMultiBarChart, 
-//   title: 'Immediate Safety Issues Present Summed by Week of Year (2007-2014)', 
-//   xType: 'date'
-// });
-//  
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: [[graph.otherKeys[2], graph.otherKeys[1]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-//   nvFn: graph.addScatterChart, 
-//   title: '#4) Anxiety Start v Anxiety End (2007-2014)', 
-//   xType: 'otherDim',
-//   yAxisLabel: 'Anxiety Start',
-//   xAxisLabel: 'Anxiety End'
-// });
-// 
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: [[graph.otherKeys[4], graph.otherKeys[5]], [graph.otherKeys[0], graph.otherKeys[4]], [graph.otherKeys[0], graph.otherKeys[5]]], //[graph.otherKeys[3], graph.otherKeys[4]]], 
-//   nvFn: graph.addScatterChart, 
-//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-//   xType: 'otherDim',
-// });
-// 
-// graph.renderTimeSeries({
-//   // path: '/data/all.csv',
-//   groups: ['Year', 'Month'], 
-//   dims: graph.otherKeys, 
-//   nvFn: graph.addMultiBarChart, 
-//   title: '#5) Decrease in Anxiety v Safety Plan Created (2007-2014)', 
-//   xType: 'date',
-// });
-// 
-// graph.renderTimeSeries({
-//   groups: ['Year', 'Month'], 
-//   dims: graph.otherKeys.slice(0, 1), 
-//   nvFn: graph.addLineChart, 
-//   title: 'Anxiety Plans Created By Month and Year (2007-2014)', 
-//   xType: 'date'
-// });
- 
-graph.renderTimeSeries({
-  groups: ['Year'], 
-  dims: ['Age'], 
-  nvFn: graph.addLineChart, 
-  title: 'Mean Caller Age (2007-2014)', 
-  xType: 'date',
-  dataType: 'Mean'
-});
-
-graph.renderTimeSeries({
-  groups: ['Year', 'Month'], 
-  dims: ['Age'], 
-  nvFn: graph.addLineChart, 
-  title: 'Mean Caller Age (2007-2014)', 
-  xType: 'date',
-  dataType: 'Mean'
-});
-
-graph.renderTimeSeries({
-  groups: ['Month'], 
-  dims: graph.RHTAgeKeys, 
-  nvFn: graph.addLineWithFocusChart, 
-  title: 'A Chart (2007-2014)', 
-  xType: 'date'
 });

@@ -11,13 +11,13 @@ module.exports = (function() {
 
   Graph.charts = [];
 
-  Graph.allKeys = ["R","H","T","T9-1","T1-5","T5-8","T8-9","Age","HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown","PA","PB","PC ","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk","SPEmpathy","SPInfoGathering","SPProblemSolving","SPRealityTesting","SPSafetyPlanning","ISIDFamily Conflict","ISIDCurrent Abuse","ISIDSuicide","ISIDOn the street","ISIDDomestic Violence","ISIDOther","SafetyPlan","AnxietyStart","AnxietyEnd","Increase","Decrease","No Change","PositiveChange","CallsInCrisisw/SP","Intake Scheduled","# of Referrals Given"];
+  Graph.allKeys = ["R","H","T","T9-1","T1-5","T5-8","T8-9","Age","HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown","PA","PB","PC","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk","SPEmpathy","SPInfoGathering","SPProblemSolving","SPRealityTesting","SPSafetyPlanning","ISIDFamily Conflict","ISIDCurrent Abuse","ISIDSuicide","ISIDOn the street","ISIDDomestic Violence","ISIDOther","SafetyPlan","AnxietyStart","AnxietyEnd","Increase","Decrease","No Change","PositiveChange","CallsInCrisisw/SP","Intake Scheduled","# of Referrals Given"];
 
   Graph.RHTAgeKeys = ["R","H","T","Age"];
 
   Graph.TKeys = ["T9-1","T1-5","T5-8","T8-9"];
 
-  Graph.problemCodeKeys = ["PA","PB","PC ","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk"];
+  Graph.problemCodeKeys = ["PA","PB","PC","PD","PE","PF","PG","PH","PI","PJ","PK","PL","PM","PN","PO","PP","PQ","PR","PS","PT","PU","PV","PW","PX ","PY ","PZ","Paa","Pbb","Pcc","Pdd","Pee","Pff","Pgg","Phh","Pii","Pjj","Pkk"];
 
   Graph.HAOHKeys = ["HAOHFamily","HAOHFriend","HAOHSchool","HAOHAdvertisement/Poster/Helpcard","HAOHOzone Staff","HAOHPolice/Court/Probation Officer","HAOHOther Org.","HAOHIs a Previous Client","HAOHO.H. Street/Outreach","HAOHPOWs","HAOHMental Health Professional","HAOHInternet/Online Search","HAOHDrop-InCenter","HAOHHousing Access","HAOHOther","HAOHUnknown"];
 
@@ -36,7 +36,7 @@ module.exports = (function() {
   _codeToDescriptionMap = { 
     'PA': 'Runaway Potential<18',
     'PB': 'Throwaway<18',
-    'PC': 'Homeless Potemtial17+',
+    'PC': 'Homeless Potential17+',
     'PD': 'Pregnancy/Teen Parent',
     'PE': 'Economic Hardship',
     'PF': 'Family Conflict',
@@ -73,9 +73,9 @@ module.exports = (function() {
   };
 
   // handles appending a new chart to the dom. returns the selector
-  function _drawChartDiv(title, questionNumber) {
+  function _drawChartDiv(title, questionNumber, size) {
 
-    var html = '<div class="chart" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
+    var html = '<div class="chart ' + size + '" id="id-' + Graph.charts.length + '"><h3 class="title">' + title + '</h3></div>';
 
     var $chart = questionNumber ? $(html).appendTo('section#question' + questionNumber) : $(html).appendTo('main');
 
@@ -129,6 +129,7 @@ module.exports = (function() {
   Graph.addStackedAreaChart = function() {
 
     var context = this;
+
 
     var chart = nv.models.stackedAreaChart()
                   .useInteractiveGuideline(true);
@@ -216,20 +217,13 @@ module.exports = (function() {
 
   };
 
-  function _timeSeriesMapFn() {
 
-  }
-
-
-  Graph.renderXYSeries = function() {
-
-  };
-
-  Graph.renderTimeSeries = function(args) {
+  Graph.renderSeries = function(args) {
     var path = args.path || _buildPath(args.groups, args.dataType);
+    var size = args.size || 'full';
 
     d3.csv(path, function(data) {
-      var selector = _drawChartDiv(args.title, args.questionNumber);
+      var selector = _drawChartDiv(args.title, args.questionNumber, size);
 
       var summaryData = _mapToKeyValuesArray({
         data: data, 
@@ -274,6 +268,9 @@ module.exports = (function() {
           yVar = +row[dim];
         } else if (args.xType === 'index') {
           xVar = idx;
+          yVar = +row[dim];
+        } else if (args.xType === 'index-1') {
+          xVar = idx + 1;
           yVar = +row[dim];
         } else if (args.xType === 'otherDim') {
           xVar = +row[dim[0]];

@@ -1,11 +1,9 @@
 .chart {
-  height: 20em;
+  height: 30em;
   float: left;
   margin: 3em auto;
   text-align: center;
   color: #50225A;
-  width: 50%;
-
 }
 @media only screen and (max-width: 600px) {
   .chart {
@@ -15,4 +13,11 @@
 .chart .title {
   margin-left: 1em;
   margin-right: 1em;
+}
+.full {
+  width: 100%;
+}
+
+.half {
+  width: 50%;
 }
