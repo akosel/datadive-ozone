@@ -29,7 +29,7 @@ graph.renderSeries({
   groups: ['AnxietyStart'], 
   dims: graph.problemCodeKeys.slice(0, 10), 
   nvFn: graph.addMultiBarChart, 
-  title: 'Common problem codes for different starting anxiety levels (2012-2014)', 
+  title: '#4) Common problem codes for different starting anxiety levels (2012-2014)', 
   xType: 'index-1',
   size: 'full',
   questionNumber: 6,

@@ -9,6 +9,9 @@
   .chart {
     width: 100%;
   }
+  .half {
+    width: 100%;
+  }
 }
 .chart .title {
   margin-left: 1em;
