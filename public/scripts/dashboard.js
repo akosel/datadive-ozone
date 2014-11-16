@@ -32,7 +32,7 @@ graph.renderSeries({
   title: '#4) Common problem codes for different starting anxiety levels (2012-2014)', 
   xType: 'index-1',
   size: 'full',
-  questionNumber: 6,
+  questionNumber: 4,
   dataType: 'Mean'
 });
 
@@ -71,7 +71,7 @@ graph.renderSeries({
   nvFn: graph.addMultiBarChart, 
   title: '#4) Selected caller problems by year (2007-2014)', 
   xType: 'date',
-  questionNumber: 2
+  questionNumber: 4
 });
 
 
