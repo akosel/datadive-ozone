@@ -33,7 +33,7 @@ graph.renderSeries({
   xType: 'index-1',
   size: 'full',
   questionNumber: 6,
-  dataType: 'mean'
+  dataType: 'Mean'
 });
 
 graph.renderSeries({
