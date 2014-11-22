@@ -13,6 +13,9 @@ app.use(morgan('combined'));
 app.get('/', function(req, res) {
   res.render('dashboard.html');
 });
+app.get('/d', function(req, res) {
+  res.render('dashboard.html');
+});
 
 app.get('/calendar', function(req, res) {
   res.render('calendar.html');

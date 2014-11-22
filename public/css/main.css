@@ -10,15 +10,20 @@ body {
 }
 header {
   background-color: #50225A;
+  padding-bottom: .25em;
 }
 header .container {
   padding: 1em;
+  overflow: hidden;
   margin: 0 auto;
+  height: 5em;
   width: 960px;
   font-size: 1em;
   line-height: 1.66em;
   background-color: #50225A;
   color: white;
+  transition: height ease-in-out 500ms;
+  -webkit-transition: height ease-in-out 500ms;
 }
 @media only screen and (max-width: 960px) {
   header .container{

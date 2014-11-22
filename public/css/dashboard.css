@@ -24,3 +24,32 @@
 .half {
   width: 50%;
 }
+
+nav h1 {
+  margin: 0;
+  font-size: 6em;
+  color: white;
+  text-align: center;
+}
+
+.toggle {
+  width: 100%;
+  border: none;
+  display: block;
+  border: solid;
+  border-radius: 50px;
+  color: white;
+  cursor: pointer;
+  padding: 1em;
+  text-align: center;
+}
+.container:hover .toggle{
+  width: 100%;
+  display: block;
+  color: #50225A;
+  background-color: white;
+}
+
+header .container:hover {
+  height: 34em;
+}
